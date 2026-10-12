@@ -110,23 +110,84 @@ const servicesData = {
   },
 };
 
-// Rich animated visual components per capability
+// Websites slideshow slides from /public/projects/
+const websiteSlides = [
+  { src: "/projects/velora.jpg", caption: "Velora · Restaurant Demo" },
+  { src: "/projects/dental-1.jpg", caption: "Dental Practice · Healthcare Portal" },
+  { src: "/projects/brima-1.jpg", caption: "Brima Cafe · Rooftop Cafe Demo" },
+];
+
+function WebsitesSlideshow({ reducedMotion, isPanelHovered, onCaptionChange }) {
+  const [slideIdx, setSlideIdx] = useState(0);
+
+  useEffect(() => {
+    if (isPanelHovered) return;
+    const interval = setInterval(() => {
+      setSlideIdx((prev) => (prev + 1) % websiteSlides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isPanelHovered]);
+
+  const currentSlide = websiteSlides[slideIdx];
+
+  useEffect(() => {
+    if (onCaptionChange) {
+      onCaptionChange(currentSlide.caption);
+    }
+  }, [slideIdx, onCaptionChange, currentSlide.caption]);
+
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-2xl bg-black/40">
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={currentSlide.src}
+          src={currentSlide.src}
+          alt={currentSlide.caption}
+          loading="lazy"
+          initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      </AnimatePresence>
+
+      {/* Slide indicator dots */}
+      <div className="absolute bottom-2.5 right-3 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md">
+        {websiteSlides.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === slideIdx ? "w-3 bg-violet-400" : "w-1.5 bg-white/40"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Candidates for service item screenshots
+const serviceImageCandidates = {
+  websites: "/services/websites.jpg",
+  "web-apps": "/services/webapps.jpg",
+  "custom-software": "/services/software.jpg",
+  "api-backend": "/services/api.jpg",
+  dashboards: "/services/dashboards.jpg",
+  whatsapp: "/services/whatsapp.jpg",
+  "lead-capture": "/services/leads.jpg",
+  "crm-sync": "/services/crm.jpg",
+  "ai-agents": "/services/agents.jpg",
+  "email-auto": "/services/email.jpg",
+};
+
+// Rich animated SVG/CSS visual components (fallback if no screenshot exists)
 function CapabilityVisual({ capId, reducedMotion }) {
   switch (capId) {
     // === Business Automation Visuals ===
     case "whatsapp":
       return (
         <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-semibold text-white">WhatsApp Business AI</span>
-            </div>
-            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-medium text-emerald-300">
-              Live Auto-Reply
-            </span>
-          </div>
-
           <div className="flex-1 space-y-3 overflow-hidden py-1">
             {/* User message */}
             <motion.div
@@ -160,23 +221,13 @@ function CapabilityVisual({ capId, reducedMotion }) {
               </span>
             </motion.div>
           </div>
-
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] text-neutral-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            <span>AI Response Latency: &lt; 1.2s · Active Session</span>
-          </div>
         </div>
       );
 
     case "lead-capture":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <span className="font-semibold text-white">Automated Lead Nurture Pipeline</span>
-            <Zap className="h-4 w-4 text-violet-400" />
-          </div>
-
-          <div className="flex-1 space-y-2.5 py-1">
+        <div className="flex h-full flex-col justify-between gap-2.5 text-xs">
+          <div className="flex-1 space-y-2 py-0.5">
             {/* Stage 1 */}
             <motion.div
               initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
@@ -194,11 +245,6 @@ function CapabilityVisual({ capId, reducedMotion }) {
               <CheckCircle2 className="h-4 w-4 text-emerald-400" />
             </motion.div>
 
-            {/* Travelling Pulse Line */}
-            <div className="flex justify-center py-0.5">
-              <div className="h-3 w-0.5 bg-violet-500/60" />
-            </div>
-
             {/* Stage 2 */}
             <motion.div
               initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
@@ -215,11 +261,6 @@ function CapabilityVisual({ capId, reducedMotion }) {
               </div>
               <span className="h-2 w-2 rounded-full bg-violet-400 animate-ping" />
             </motion.div>
-
-            {/* Travelling Pulse Line */}
-            <div className="flex justify-center py-0.5">
-              <div className="h-3 w-0.5 bg-violet-500/60" />
-            </div>
 
             {/* Stage 3 */}
             <motion.div
@@ -243,13 +284,8 @@ function CapabilityVisual({ capId, reducedMotion }) {
 
     case "crm-sync":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <span className="font-semibold text-white">Bi-Directional CRM &amp; Database Sync</span>
-            <Activity className="h-4 w-4 text-emerald-400" />
-          </div>
-
-          <div className="flex-1 space-y-2 py-1">
+        <div className="flex h-full flex-col justify-between gap-2.5 text-xs">
+          <div className="flex-1 space-y-2 py-0.5">
             {[
               { label: "Client Profile & Contact", source: "Website Lead", status: "Synced" },
               { label: "WhatsApp Chat Transcript", source: "WhatsApp AI", status: "Synced" },
@@ -260,7 +296,7 @@ function CapabilityVisual({ capId, reducedMotion }) {
                 initial={reducedMotion ? { opacity: 1 } : { opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.35, delay: reducedMotion ? 0 : i * 0.12 }}
-                className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3"
+                className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-2.5"
               >
                 <div>
                   <p className="font-semibold text-white">{row.label}</p>
@@ -277,31 +313,18 @@ function CapabilityVisual({ capId, reducedMotion }) {
               </motion.div>
             ))}
           </div>
-
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-2.5 text-[11px] text-neutral-400 flex items-center justify-between">
-            <span>Database Protocol: PostgreSQL / Supabase</span>
-            <span className="text-emerald-400">All Nodes Healthy</span>
-          </div>
         </div>
       );
 
     case "ai-agents":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <div className="flex items-center gap-2">
-              <Bot className="h-4 w-4 text-violet-400" />
-              <span className="font-semibold text-white">Autonomous Agent Suite</span>
-            </div>
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          </div>
-
-          <div className="flex-1 space-y-2.5 py-1">
+        <div className="flex h-full flex-col justify-between gap-2.5 text-xs">
+          <div className="flex-1 space-y-2.5 py-0.5">
             <motion.div
               initial={reducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="rounded-xl border border-violet-500/30 bg-violet-950/30 p-3.5"
+              className="rounded-xl border border-violet-500/30 bg-violet-950/30 p-3"
             >
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-violet-200">Active Workflow Execution</span>
@@ -326,23 +349,13 @@ function CapabilityVisual({ capId, reducedMotion }) {
               ))}
             </div>
           </div>
-
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] p-2 text-[10px] text-neutral-400">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-            <span>Guardrails enforced · Continuous uptime</span>
-          </div>
         </div>
       );
 
     case "email-auto":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <span className="font-semibold text-white">Automated Email Sequences</span>
-            <Mail className="h-4 w-4 text-indigo-400" />
-          </div>
-
-          <div className="flex-1 space-y-2 py-1">
+        <div className="flex h-full flex-col justify-between gap-2 text-xs">
+          <div className="flex-1 space-y-2 py-0.5">
             {[
               { step: "01", name: "Welcome & Onboarding Kit", trigger: "Instant Trigger" },
               { step: "02", name: "Value Case Studies & Demos", trigger: "24h Event Delay" },
@@ -366,25 +379,14 @@ function CapabilityVisual({ capId, reducedMotion }) {
               </motion.div>
             ))}
           </div>
-
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-2 text-center text-[10px] text-neutral-400">
-            DKIM / SPF Verified · High Inbox Deliverability
-          </div>
         </div>
       );
 
     // === SaaS Development Visuals ===
     case "websites":
       return (
-        <div className="flex h-full flex-col justify-between gap-2.5 text-xs">
-          <div className="flex items-center gap-1.5 border-b border-white/10 pb-2">
-            <span className="h-2 w-2 rounded-full bg-red-500/80" />
-            <span className="h-2 w-2 rounded-full bg-amber-500/80" />
-            <span className="h-2 w-2 rounded-full bg-emerald-500/80" />
-            <span className="ml-2 font-mono text-[10px] text-neutral-400">https://yourbrand.com</span>
-          </div>
-
-          {/* Wireframe cascading sections */}
+        <div className="flex h-full flex-col justify-between gap-2 text-xs">
+          {/* Wireframe cascading sections (No duplicate browser chrome) */}
           <div className="flex-1 space-y-2 rounded-xl border border-white/10 bg-white/[0.02] p-3">
             <motion.div
               initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
@@ -431,27 +433,12 @@ function CapabilityVisual({ capId, reducedMotion }) {
               </div>
             </motion.div>
           </div>
-
-          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-            <span>Responsive Layout Engine</span>
-            <span className="text-violet-300">Modern Tailwind + React</span>
-          </div>
         </div>
       );
 
     case "web-apps":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <div className="flex items-center gap-2">
-              <LayoutGrid className="h-4 w-4 text-violet-400" />
-              <span className="font-semibold text-white">Full-Stack SaaS Platform</span>
-            </div>
-            <span className="rounded bg-violet-500/20 px-2 py-0.5 text-[10px] font-mono text-violet-300">
-              React + Node API
-            </span>
-          </div>
-
+        <div className="flex h-full flex-col justify-between gap-2.5 text-xs">
           <div className="grid grid-cols-2 gap-2.5">
             <div className="rounded-xl border border-white/10 bg-white/[0.03] p-2.5">
               <span className="text-[10px] text-neutral-400">Active Workspaces</span>
@@ -477,22 +464,12 @@ function CapabilityVisual({ capId, reducedMotion }) {
               ))}
             </div>
           </div>
-
-          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-            <span>Client Portals &amp; Workspaces</span>
-            <span className="text-emerald-400">High Availability</span>
-          </div>
         </div>
       );
 
     case "custom-software":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <span className="font-semibold text-white">Modular Architecture Network</span>
-            <Cpu className="h-4 w-4 text-violet-400" />
-          </div>
-
+        <div className="flex h-full flex-col justify-between gap-2 text-xs">
           <div className="relative flex-1 py-1">
             <div className="grid grid-cols-2 gap-2.5">
               {[
@@ -517,18 +494,13 @@ function CapabilityVisual({ capId, reducedMotion }) {
               ))}
             </div>
           </div>
-
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-2 text-[10px] text-neutral-400 flex items-center justify-between">
-            <span>Modular Core Components</span>
-            <span className="text-violet-300">Clean Scalable Code</span>
-          </div>
         </div>
       );
 
     case "api-backend":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs font-mono">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+        <div className="flex h-full flex-col justify-between gap-2 text-xs font-mono">
+          <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
             <span className="text-[11px] text-emerald-400">POST /api/v1/services/build</span>
             <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-300">200 OK</span>
           </div>
@@ -549,28 +521,18 @@ function CapabilityVisual({ capId, reducedMotion }) {
             </p>
             <p className="text-violet-400">&#125;</p>
           </div>
-
-          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-            <span>Microservices &amp; Serverless</span>
-            <span className="text-emerald-400">Payload Verified</span>
-          </div>
         </div>
       );
 
     case "dashboards":
       return (
-        <div className="flex h-full flex-col justify-between gap-3 text-xs">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <span className="font-semibold text-white">Analytics Control Suite</span>
-            <BarChart3 className="h-4 w-4 text-violet-400" />
-          </div>
-
+        <div className="flex h-full flex-col justify-between gap-2 text-xs">
           <div className="flex-1 space-y-2 py-1">
             {/* SVG Wave Chart */}
             <div className="h-20 w-full overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-2">
               <svg className="h-full w-full overflow-visible" viewBox="0 0 100 40">
                 <defs>
-                  <linearGradient id="dashGradNew" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="dashGradUpdated" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.45" />
                     <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
                   </linearGradient>
@@ -584,7 +546,7 @@ function CapabilityVisual({ capId, reducedMotion }) {
                   stroke="#a78bfa"
                   strokeWidth="2.5"
                 />
-                <path d="M 0,30 Q 25,8 50,18 T 100,5 L 100,40 L 0,40 Z" fill="url(#dashGradNew)" />
+                <path d="M 0,30 Q 25,8 50,18 T 100,5 L 100,40 L 0,40 Z" fill="url(#dashGradUpdated)" />
               </svg>
             </div>
 
@@ -604,11 +566,6 @@ function CapabilityVisual({ capId, reducedMotion }) {
               ))}
             </div>
           </div>
-
-          <div className="flex items-center justify-between text-[10px] text-neutral-400">
-            <span>Real-Time Visualizations</span>
-            <span className="text-violet-300">Admin Control</span>
-          </div>
         </div>
       );
 
@@ -624,6 +581,12 @@ function ServicesContent() {
   const [isHovered, setIsHovered] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+
+  // Websites slideshow caption
+  const [websiteCaption, setWebsiteCaption] = useState(websiteSlides[0].caption);
+
+  // Image load error tracking (falls back to SVG visual)
+  const [imgLoadErrors, setImgLoadErrors] = useState({});
 
   // Mouse tilt state on desktop
   const panelRef = useRef(null);
@@ -660,7 +623,6 @@ function ServicesContent() {
   // Desktop subtle mouse-tilt handler
   const handleMouseMove = (e) => {
     if (reducedMotion || !panelRef.current) return;
-    // Only apply on hover capable pointer (desktop)
     if (!window.matchMedia("(hover: hover)").matches) return;
 
     const rect = panelRef.current.getBoundingClientRect();
@@ -669,8 +631,8 @@ function ServicesContent() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
+    const rotateX = ((y - centerY) / centerY) * -4;
+    const rotateY = ((x - centerX) / centerX) * 4;
 
     setTilt({ rotateX, rotateY });
   };
@@ -684,11 +646,15 @@ function ServicesContent() {
     currentService.capabilities.find((c) => c.id === activeCapabilityId) ||
     currentService.capabilities[0];
 
+  const handleImageError = (id) => {
+    setImgLoadErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
   return (
     <>
       <section
         id="services"
-        className="relative overflow-hidden bg-[#05030d] px-6 py-20 text-white sm:py-28 lg:px-8"
+        className="relative overflow-hidden bg-[#05030d] px-6 py-20 text-white sm:py-28 lg:px-8 pb-24 sm:pb-28 lg:pb-28"
         style={{ perspective: 1200 }}
       >
         {/* Background glow elements */}
@@ -772,7 +738,7 @@ function ServicesContent() {
                       : `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
                     transition: "transform 0.2s ease-out",
                   }}
-                  className="group relative h-[310px] sm:h-[350px] lg:h-[420px] w-full overflow-hidden rounded-3xl border border-white/15 bg-[#090616]/95 p-5 sm:p-7 shadow-[0_24px_70px_rgba(0,0,0,0.65),0_0_50px_rgba(139,92,246,0.25)] backdrop-blur-2xl"
+                  className="group relative h-[340px] sm:h-[380px] lg:h-[420px] w-full overflow-hidden rounded-3xl border border-white/15 bg-[#090616]/95 p-5 sm:p-7 shadow-[0_24px_70px_rgba(0,0,0,0.65),0_0_50px_rgba(139,92,246,0.25)] backdrop-blur-2xl flex flex-col justify-between"
                 >
                   {/* Subtle Grid overlay */}
                   <div className="u-grid absolute inset-0 opacity-40 pointer-events-none" />
@@ -780,68 +746,85 @@ function ServicesContent() {
                   {/* Top Ambient Glow */}
                   <div className="pointer-events-none absolute -top-16 left-1/2 h-36 w-72 -translate-x-1/2 rounded-full bg-violet-600/25 blur-[70px]" />
 
-                  {/* Slow Floating Badges */}
-                  {!reducedMotion && (
-                    <>
-                      <motion.div
-                        animate={{ y: [-3, 3, -3], x: [-2, 2, -2] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        className="pointer-events-none absolute top-4 right-4 z-20 flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-600/20 px-2.5 py-1 text-[10px] font-semibold text-violet-200 backdrop-blur-md shadow-[0_0_12px_rgba(139,92,246,0.2)]"
-                      >
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        Live
-                      </motion.div>
-
-                      <motion.div
-                        animate={{ y: [3, -3, 3], x: [2, -2, 2] }}
-                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="pointer-events-none absolute bottom-4 left-4 z-20 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium text-neutral-300 backdrop-blur-md"
-                      >
-                        <ShieldCheck className="h-3 w-3 text-emerald-400" />
-                        Secure
-                      </motion.div>
-
-                      <motion.div
-                        animate={{ y: [-2, 3, -2] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="pointer-events-none absolute bottom-4 right-4 z-20 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium text-neutral-300 backdrop-blur-md"
-                      >
-                        <Zap className="h-3 w-3 text-violet-400" />
-                        Fast
-                      </motion.div>
-                    </>
-                  )}
-
-                  {/* Browser Top Controls */}
-                  <div className="relative z-10 mb-3.5 flex items-center justify-between border-b border-white/10 pb-2.5">
-                    <div className="flex items-center gap-1.5">
+                  {/* 1. SINGLE BROWSER TOP BAR (macOS dots + Item Title/Project Name + Status) */}
+                  <div className="relative z-20 flex items-center justify-between border-b border-white/10 pb-3">
+                    {/* macOS dots */}
+                    <div className="flex items-center gap-1.5 shrink-0">
                       <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
                       <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
                       <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
                     </div>
 
-                    <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-0.5 text-[10px] font-mono text-neutral-400">
-                      <Lock className="h-2.5 w-2.5 text-neutral-500" />
-                      <span>udyamdev.com/solutions/{activeCapability.id}</span>
+                    {/* Item title / project name badge (NO fake URL) */}
+                    <div className="mx-2 flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-600/15 px-3 py-0.5 text-[11px] font-semibold text-violet-200 backdrop-blur-md max-w-[200px] sm:max-w-[280px] truncate">
+                      <Sparkles className="h-3 w-3 text-violet-400 shrink-0" />
+                      <span className="truncate">
+                        {activeCapabilityId === "websites" && websiteCaption
+                          ? websiteCaption
+                          : activeCapability.title}
+                      </span>
                     </div>
 
-                    <div className="w-6" />
+                    {/* Top-Right Floating Status Chip */}
+                    <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-300 shrink-0">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Live
+                    </div>
                   </div>
 
-                  {/* Dynamic Visual Area with AnimatePresence */}
-                  <div className="relative z-10 h-[calc(100%-55px)] w-full">
+                  {/* 2. DYNAMIC VISUAL / IMAGE CONTENT AREA */}
+                  <div className="relative z-10 flex-1 my-2 overflow-hidden w-full">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={activeCapability.id + activeTab}
-                        initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 14, scale: 0.98 }}
+                        initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 12, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -14, scale: 0.98 }}
+                        exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -12, scale: 0.98 }}
                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full w-full"
                       >
-                        <CapabilityVisual capId={activeCapability.id} reducedMotion={reducedMotion} />
+                        {/* Websites item -> Auto-crossfading slideshow from /public/projects/ */}
+                        {activeCapabilityId === "websites" ? (
+                          <WebsitesSlideshow
+                            reducedMotion={reducedMotion}
+                            isPanelHovered={isHovered}
+                            onCaptionChange={setWebsiteCaption}
+                          />
+                        ) : serviceImageCandidates[activeCapabilityId] &&
+                          !imgLoadErrors[activeCapabilityId] ? (
+                          /* Image Slot for other services */
+                          <div className="relative h-full w-full overflow-hidden rounded-2xl bg-black/40">
+                            <img
+                              src={serviceImageCandidates[activeCapabilityId]}
+                              alt={activeCapability.title}
+                              loading="lazy"
+                              onError={() => handleImageError(activeCapabilityId)}
+                              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                            />
+                          </div>
+                        ) : (
+                          /* Fallback to Rich SVG/CSS Visual */
+                          <CapabilityVisual capId={activeCapability.id} reducedMotion={reducedMotion} />
+                        )}
                       </motion.div>
                     </AnimatePresence>
+                  </div>
+
+                  {/* 3. BOTTOM CAPTION & STATUS ROW (Dedicated padding, wraps, never overlaps) */}
+                  <div className="relative z-20 pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 text-[11px] text-neutral-400">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      <span className="font-medium text-neutral-300 break-words line-clamp-1 sm:line-clamp-none">
+                        {activeCapabilityId === "websites"
+                          ? (websiteCaption || "Live Web Experience Showcase")
+                          : `${activeCapability.title} · Production Ready`}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0 rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-mono text-violet-300">
+                      <Zap className="h-3 w-3 text-violet-400" />
+                      Fast
+                    </div>
                   </div>
                 </div>
               </div>
