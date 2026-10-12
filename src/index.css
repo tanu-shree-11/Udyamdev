@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #05030d;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.6);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Consistent premium container + spacing */
+.container-u {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .container-u {
+    padding-inline: 2rem;
+  }
+}
+
+/* Subtle blueprint grid overlay */
+.u-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 30%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 30%, black, transparent);
+}
+
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
