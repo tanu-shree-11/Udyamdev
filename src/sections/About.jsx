@@ -110,9 +110,9 @@ function About() {
               <Sparkles className="h-3.5 w-3.5" />
               About UdyamDev
             </span>
-            <h2 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]">
+            <h2 className="mt-6 text-[clamp(2rem,5vw,3.2rem)] font-bold leading-[1.08] tracking-tight">
               Engineering Digital Solutions{" "}
-              <span className="block bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">
+              <span className="block u-gradient-text">
                 That Scale Your Business
               </span>
             </h2>

@@ -2,6 +2,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  overflow-x: clip;
 }
 
 body {
@@ -10,7 +12,8 @@ body {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 ::selection {
@@ -22,6 +25,40 @@ body {
   outline: 2px solid rgba(167, 139, 250, 0.6);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* Button & tap target feedback */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* Animated gradient on key headings */
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.u-gradient-text {
+  background: linear-gradient(135deg, #c084fc, #e0e7ff, #818cf8, #c084fc);
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 7s ease infinite;
 }
 
 /* Consistent premium container + spacing */
@@ -48,18 +85,22 @@ body {
   -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 30%, black, transparent);
 }
 
-@keyframes gradient-pan {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
+/* Hide scrollbar for clean horizontal swipes */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: auto !important;
+  }
+
+  .u-gradient-text {
+    animation: none !important;
   }
 
   *,

@@ -679,9 +679,9 @@ function ServicesContent() {
               <Sparkles className="h-3.5 w-3.5" />
               What We Build &amp; Automate
             </span>
-            <h2 className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.25rem]">
+            <h2 className="mt-5 text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.05] tracking-tight">
               Capabilities Built For{" "}
-              <span className="bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">
+              <span className="u-gradient-text">
                 Modern Growth
               </span>
             </h2>

@@ -333,7 +333,7 @@ function ChatBot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-0 bottom-0 z-50 flex h-[85vh] max-h-[600px] flex-col overflow-hidden rounded-t-3xl border border-white/15 bg-[#0a0718]/95 shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_60px_rgba(139,92,246,0.3)] backdrop-blur-2xl sm:bottom-6 sm:right-6 sm:left-auto sm:h-[540px] sm:w-[390px] sm:rounded-3xl"
+              className="fixed inset-x-0 bottom-0 z-50 flex h-[85svh] max-h-[600px] flex-col overflow-hidden rounded-t-3xl border border-white/15 bg-[#0a0718]/95 shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_60px_rgba(139,92,246,0.3)] backdrop-blur-xl sm:bottom-6 sm:right-6 sm:left-auto sm:h-[540px] sm:w-[390px] sm:rounded-3xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-3.5 backdrop-blur-xl">

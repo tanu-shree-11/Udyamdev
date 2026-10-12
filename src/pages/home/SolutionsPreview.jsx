@@ -98,9 +98,9 @@ function SolutionsPreview() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/80">
             How We Solve Problems
           </p>
-          <h2 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
+          <h2 className="mt-4 text-[clamp(2rem,5vw,3rem)] font-bold leading-[1.05] tracking-tight">
             Solutions Built Around{" "}
-            <span className="bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">
+            <span className="u-gradient-text">
               Your Business
             </span>
           </h2>

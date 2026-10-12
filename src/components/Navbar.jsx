@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
 import logo from "../assets/logo.png.png";
 
@@ -197,59 +198,67 @@ function Navbar() {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((open) => !open)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition-colors duration-300 hover:border-violet-500/40 hover:bg-violet-600/20 lg:hidden"
+            className="inline-flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition-colors duration-300 hover:border-violet-500/40 hover:bg-violet-600/20 lg:hidden cursor-pointer"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {mobileOpen && (
-        <div className="border-t border-white/10 bg-[#05030d]/95 backdrop-blur-xl lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
-            {navItems.map((item) => {
-              const activeItem = isItemActive(item);
-              const className = `flex items-center justify-between rounded-xl px-4 py-3 text-sm transition-colors ${
-                activeItem
-                  ? "bg-white/[0.06] text-white"
-                  : "text-neutral-400 hover:bg-white/[0.04] hover:text-white"
-              }`;
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28, ease: "easeInOut" }}
+            className="overflow-hidden border-t border-white/10 bg-[#05030d]/95 backdrop-blur-xl lg:hidden"
+          >
+            <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+              {navItems.map((item) => {
+                const activeItem = isItemActive(item);
+                const className = `flex min-h-[44px] items-center justify-between rounded-xl px-4 py-2.5 text-sm font-medium transition-colors ${
+                  activeItem
+                    ? "bg-white/[0.06] text-white"
+                    : "text-neutral-400 hover:bg-white/[0.04] hover:text-white"
+                }`;
 
-              if (item.type === "route") {
+                if (item.type === "route") {
+                  return (
+                    <Link
+                      key={item.label}
+                      to={item.href}
+                      className={className}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                }
+
                 return (
-                  <Link
+                  <a
                     key={item.label}
-                    to={item.href}
+                    href={hashHref(item.href)}
+                    onClick={(e) => handleNavClick(e, item)}
                     className={className}
-                    onClick={() => setMobileOpen(false)}
                   >
                     {item.label}
-                  </Link>
+                  </a>
                 );
-              }
-
-              return (
-                <a
-                  key={item.label}
-                  href={hashHref(item.href)}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className={className}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-            <a
-              href={hashHref("contact")}
-              onClick={(e) => handleNavClick(e, { type: "hash", href: "contact" })}
-              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white"
-            >
-              Let&apos;s Talk
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </nav>
-        </div>
-      )}
+              })}
+              <a
+                href={hashHref("contact")}
+                onClick={(e) => handleNavClick(e, { type: "hash", href: "contact" })}
+                className="mt-2 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white"
+              >
+                Let&apos;s Talk
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

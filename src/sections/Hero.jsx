@@ -66,15 +66,15 @@ function Hero() {
                 Digital Solutions for Modern Businesses
               </p>
 
-              <h1 className="text-4xl font-bold leading-[1.12] tracking-tight sm:text-5xl lg:text-[3.1rem]">
+              <h1 className="text-[clamp(2.2rem,5.5vw,3.2rem)] font-bold leading-[1.12] tracking-tight">
                 Digital Solutions That
                 <br />
                 Help Your{" "}
-                <span className="bg-gradient-to-r from-violet-400 via-violet-300 to-indigo-300 bg-clip-text text-transparent">
+                <span className="u-gradient-text">
                   Business
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-violet-400 via-violet-300 to-indigo-300 bg-clip-text text-transparent">
+                <span className="u-gradient-text">
                   Grow.
                 </span>
               </h1>

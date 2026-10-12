@@ -202,9 +202,9 @@ function Contact() {
         className="relative z-10 mx-auto max-w-7xl"
       >
         <Reveal3D className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
+          <h2 className="text-[clamp(2rem,5vw,3rem)] font-bold leading-[1.05] tracking-tight">
             Let&apos;s Build Something{" "}
-            <span className="bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">
+            <span className="u-gradient-text">
               Amazing Together
             </span>
           </h2>

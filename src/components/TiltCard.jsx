@@ -8,13 +8,16 @@ function TiltCard({ children, className = "", style = {} }) {
 
   const handleMouseMove = (e) => {
     if (reducedMotion || !cardRef.current) return;
+    // Strictly disable on touch screens
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
+
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Calculate rotation (-6 to +6 degrees)
+    // Subtle rotation (-6 to +6 degrees)
     const rotateY = ((mouseX / width) - 0.5) * 12;
     const rotateX = ((mouseY / height) - 0.5) * -12;
 

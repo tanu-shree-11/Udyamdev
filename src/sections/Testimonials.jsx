@@ -91,9 +91,9 @@ function Testimonials() {
                 Client Experiences
               </span>
 
-              <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              <h2 className="mt-6 text-[clamp(1.9rem,5vw,3rem)] font-bold tracking-tight text-white">
                 Be Our Next{" "}
-                <span className="bg-gradient-to-r from-violet-400 via-violet-300 to-indigo-300 bg-clip-text text-transparent">
+                <span className="u-gradient-text">
                   Success Story
                 </span>
               </h2>

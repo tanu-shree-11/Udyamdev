@@ -121,7 +121,7 @@ function Footer() {
                   <Sparkles className="h-3.5 w-3.5" />
                   Get Started Today
                 </span>
-                <h3 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                <h3 className="mt-3 text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-tight text-white">
                   Ready to automate your business?
                 </h3>
                 <p className="mt-1 text-sm text-neutral-400">
