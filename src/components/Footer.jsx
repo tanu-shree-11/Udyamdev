@@ -146,12 +146,13 @@ function Footer() {
               <a
                 href="#home"
                 onClick={(e) => scrollTo(e, "#home")}
-                className="inline-block"
+                className="group inline-block"
               >
                 <img
-                  src={logo}
+                  src="/logo.png"
                   alt="UdyamDev"
-                  className="h-11 w-auto object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.4)]"
+                  className="h-[36px] sm:h-[44px] w-auto object-contain transition-all duration-300 [mix-blend-mode:screen] group-hover:drop-shadow-[0_0_14px_rgba(167,139,250,0.65)]"
+                  style={{ imageRendering: "-webkit-optimize-contrast" }}
                 />
               </a>
               <p className="mt-4 text-sm leading-relaxed text-neutral-400">

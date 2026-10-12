@@ -133,13 +133,14 @@ function Navbar() {
         <Link
           to="/"
           aria-label="UdyamDev Home"
-          className="flex shrink-0 items-center"
+          className="group flex shrink-0 items-center"
           onClick={handleHomeClick}
         >
-<img
-            src={logo}
+          <img
+            src="/logo.png"
             alt="UdyamDev"
-            className="h-16 w-auto object-contain transition-transform duration-300 hover:opacity-90 sm:h-[4.25rem]"
+            className="h-[36px] sm:h-[44px] w-auto object-contain transition-all duration-300 [mix-blend-mode:screen] group-hover:drop-shadow-[0_0_14px_rgba(167,139,250,0.65)]"
+            style={{ imageRendering: "-webkit-optimize-contrast" }}
           />
         </Link>
 
