@@ -10,6 +10,7 @@ import Work from "../sections/Portfolio";
 import ProjectsStrip from "../components/ProjectsStrip";
 import Testimonials from "../sections/Testimonials";
 import Contact from "../sections/Contact";
+import FAQ from "../sections/FAQ";
 import ErrorBoundary from "../components/ErrorBoundary";
 
 function Home() {
@@ -60,6 +61,10 @@ function Home() {
 
       <ErrorBoundary>
         <Testimonials />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <FAQ />
       </ErrorBoundary>
 
       <ErrorBoundary>
